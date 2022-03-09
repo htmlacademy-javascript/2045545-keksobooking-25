@@ -19,7 +19,7 @@ const DECIMAL_PRECISION = 5;
 const MIN_ROOMS_QTY = 1;
 const MAX_ROOMS_QTY = 6;
 const LOREM = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ipsum odit corrupti dolores fuga. Earum repellendus ducimus quaerat doloribus ut reiciendis placeat quos, saepe enim ipsa quis, recusandae officiis nihil.';
-const includedFeatureIndex = [];
+
 
 const getRandomPositiveInteger = (a, b) => {
   const min = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
@@ -49,29 +49,25 @@ const createAvatarFullPath = () => {
 };
 
 
-const getRandomArrayElement = (elements) => {
-  return elements[getRandomPositiveInteger(0, (elements.length - 1))];
-};
+const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, (elements.length - 1))];
 
-const getIncludedFeaturesIndex = () => {
+const getIncludedElementsIndexes = (arr) => {
+  const includedElementsIndexes = [];
+  includedElementsIndexes.length = getRandomPositiveInteger(1, arr.length);
+  for (let i = 0; i < includedElementsIndexes.length; i++) {
 
-  includedFeatureIndex.length = getRandomPositiveInteger(1, (FEATURES.length - 1));
-  for (let i = 0; i < includedFeatureIndex.length; i++) {
-
-    const n = getRandomPositiveInteger(0, (FEATURES.length - 1));
-    if (!includedFeatureIndex.includes(n)) {
-      includedFeatureIndex[i] = n;
+    const n = getRandomPositiveInteger(0, (arr.length - 1));
+    if (!includedElementsIndexes.includes(n)) {
+      includedElementsIndexes[i] = n;
 
     } else {
       i--;
     }
   }
-
-  return includedFeatureIndex;
+  return includedElementsIndexes;
 };
 
 const sortArrayToIncrease = (a, b) => {
-
   if (a > b) {
     return 1;
   } else if (b > a) {
@@ -81,15 +77,14 @@ const sortArrayToIncrease = (a, b) => {
   }
 };
 
-const fillIncludedFeaturesArray = () => {
-
-  getIncludedFeaturesIndex().sort(sortArrayToIncrease);
-  const featuresIncludedArray = [];
-  for (let i = 0; i < includedFeatureIndex.length; i++) {
-    featuresIncludedArray.push(FEATURES[includedFeatureIndex[i]]);
+const fillIncludedElementsArray = (arr) => {
+  const sortedIncludedElementsIndexes = getIncludedElementsIndexes(arr).sort(sortArrayToIncrease);
+  const elementsArray = [];
+  for (let i = 0; i < sortedIncludedElementsIndexes.length; i++) {
+    elementsArray.push(arr[sortedIncludedElementsIndexes[i]]);
   }
-  return featuresIncludedArray;
 
+  return elementsArray;
 };
 
 const repeatStr = (str, n) => {
@@ -99,7 +94,6 @@ const repeatStr = (str, n) => {
   }
   return newStr;
 };
-
 
 const createAdvert = () => {
   const latitude = getRandomPositiveFloat(MIN_LAT, MAX_LAT, DECIMAL_PRECISION);
@@ -120,9 +114,9 @@ const createAdvert = () => {
       guests: getRandomPositiveInteger(MIN_GUESTS_QTY, MAX_GUESTS_QTY),
       checkin: getRandomArrayElement(CHECKINS_CHECKOUTS),
       checkout: getRandomArrayElement(CHECKINS_CHECKOUTS),
-      features: fillIncludedFeaturesArray(),
+      features: fillIncludedElementsArray(FEATURES),
       description: repeatStr(LOREM, getRandomPositiveInteger(0, 10)),
-      photos: getRandomArrayElement(PHOTOS),
+      photos: fillIncludedElementsArray(PHOTOS),
     },
     location: {
       lat: latitude,
