@@ -1,7 +1,3 @@
-import {
-  SIMILAR_ADVERTS_COUNT
-} from './data.js';
-
 const getRandomPositiveInteger = (a, b) => {
   const min = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const max = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
@@ -27,19 +23,6 @@ const createRandomNumbersArray = (length) => {
     }
   }
   return randomNumbers;
-};
-
-let serialAvatarPicIndex = 0;
-const createAvatarFullPath = () => {
-  let avatarPicPath = 'img/avatars/user';
-  const randomNumbers = createRandomNumbersArray(SIMILAR_ADVERTS_COUNT);
-  const index = randomNumbers[serialAvatarPicIndex];
-  if (index <= 9) {
-    avatarPicPath += '0';
-  }
-  const avatarFullPath = `${avatarPicPath}${index}.png`;
-  serialAvatarPicIndex++;
-  return avatarFullPath;
 };
 
 
@@ -92,8 +75,8 @@ const repeatStr = (str, n) => {
 export {
   getRandomPositiveInteger,
   getRandomPositiveFloat,
-  createAvatarFullPath,
   getRandomArrayElement,
   fillIncludedElementsArray,
-  repeatStr
+  repeatStr,
+  createRandomNumbersArray
 };

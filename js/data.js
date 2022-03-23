@@ -1,10 +1,10 @@
 import {
   getRandomPositiveInteger,
   getRandomPositiveFloat,
-  createAvatarFullPath,
   getRandomArrayElement,
   fillIncludedElementsArray,
-  repeatStr
+  repeatStr,
+  createRandomNumbersArray
 } from './utils.js';
 import {
   getRussianTypeWord,
@@ -34,6 +34,18 @@ const MIN_ROOMS_QTY = 1;
 const MAX_ROOMS_QTY = 6;
 const LOREM = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ipsum odit corrupti dolores fuga. Earum repellendus ducimus quaerat doloribus ut reiciendis placeat quos, saepe enim ipsa quis, recusandae officiis nihil.';
 
+let serialAvatarPicIndex = 0;
+const createAvatarFullPath = () => {
+  let avatarPicPath = 'img/avatars/user';
+  const randomNumbers = createRandomNumbersArray(SIMILAR_ADVERTS_COUNT);
+  const index = randomNumbers[serialAvatarPicIndex];
+  if (index <= 9) {
+    avatarPicPath += '0';
+  }
+  const avatarFullPath = `${avatarPicPath}${index}.png`;
+  serialAvatarPicIndex++;
+  return avatarFullPath;
+};
 
 const createAdvert = () => {
   const latitude = getRandomPositiveFloat(MIN_LAT, MAX_LAT, DECIMAL_PRECISION);

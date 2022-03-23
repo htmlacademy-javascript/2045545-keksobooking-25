@@ -4,7 +4,6 @@ import {
 import {
   adjustWordForRooms,
   adjustWordForGuests,
-
 } from './dictionary.js';
 
 
@@ -37,9 +36,9 @@ cardsElements.forEach(({
   const advertPhotos = cardElement.querySelector('.popup__photo');
   const advertPhotoList = cardElement.querySelector('.popup__photos');
   cardElement.querySelector('.popup__photo').remove();
-  for (let i = 0; i < photos.length; i++) {
+  for (const photo of photos) {
     const advertPhoto = advertPhotos.cloneNode(false);
-    advertPhoto.src = photos[i];
+    advertPhoto.src = photo;
     advertPhotoList.appendChild(advertPhoto);
   }
   cardElement.querySelector('.popup__avatar').src = author.avatar;
