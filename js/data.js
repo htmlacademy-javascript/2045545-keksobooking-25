@@ -6,6 +6,10 @@ import {
   fillIncludedElementsArray,
   repeatStr
 } from './utils.js';
+import {
+  getRussianTypeWord,
+  getRussianWordEnding
+} from './dictionary.js';
 
 
 const SIMILAR_ADVERTS_COUNT = 10;
@@ -42,16 +46,16 @@ const createAdvert = () => {
     },
 
     offer: {
-      title: `${rooms}-rooms ${type}`,
+      title: `${rooms}-КОМНАТН${getRussianWordEnding(type).toUpperCase()} ${getRussianTypeWord(type).toUpperCase()}`,
       address: `${latitude}, ${longitude}`,
       price: getRandomPositiveInteger(MIN_PRICE, MAX_PRICE),
-      type: type,
+      type: getRussianTypeWord(type),
       rooms: rooms,
       guests: getRandomPositiveInteger(MIN_GUESTS_QTY, MAX_GUESTS_QTY),
       checkin: getRandomArrayElement(CHECKINS_CHECKOUTS),
       checkout: getRandomArrayElement(CHECKINS_CHECKOUTS),
       features: fillIncludedElementsArray(FEATURES),
-      description: repeatStr(LOREM, getRandomPositiveInteger(0, 10)),
+      description: repeatStr(LOREM, getRandomPositiveInteger(1, 3)),
       photos: fillIncludedElementsArray(PHOTOS),
     },
     location: {
@@ -69,4 +73,7 @@ const createAdverts = () => Array.from({
 
 export {
   createAdverts
+};
+export {
+  SIMILAR_ADVERTS_COUNT
 };

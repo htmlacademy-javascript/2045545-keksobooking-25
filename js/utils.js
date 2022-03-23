@@ -1,3 +1,7 @@
+import {
+  SIMILAR_ADVERTS_COUNT
+} from './data.js';
+
 const getRandomPositiveInteger = (a, b) => {
   const min = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const max = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
@@ -12,13 +16,28 @@ const getRandomPositiveFloat = (a, b, digits = 1) => {
   return +result.toFixed(digits);
 };
 
-let serialAvatarPicIndex = 1;
+const createRandomNumbersArray = (length) => {
+  const randomNumbers = [];
+  for (let i = 0; i < length; i++) {
+    const randomNumber = getRandomPositiveInteger(1, length);
+    if (!randomNumbers.includes(randomNumber)) {
+      randomNumbers[i] = randomNumber;
+    } else {
+      i--;
+    }
+  }
+  return randomNumbers;
+};
+
+let serialAvatarPicIndex = 0;
 const createAvatarFullPath = () => {
   let avatarPicPath = 'img/avatars/user';
-  if (serialAvatarPicIndex <= 9) {
-    avatarPicPath += '/0';
+  const randomNumbers = createRandomNumbersArray(SIMILAR_ADVERTS_COUNT);
+  const index = randomNumbers[serialAvatarPicIndex];
+  if (index <= 9) {
+    avatarPicPath += '0';
   }
-  const avatarFullPath = `${avatarPicPath}${serialAvatarPicIndex}.png`;
+  const avatarFullPath = `${avatarPicPath}${index}.png`;
   serialAvatarPicIndex++;
   return avatarFullPath;
 };
