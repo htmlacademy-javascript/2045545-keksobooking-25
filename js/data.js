@@ -55,7 +55,7 @@ const createAdvert = () => {
       checkin: getRandomArrayElement(CHECKINS_CHECKOUTS),
       checkout: getRandomArrayElement(CHECKINS_CHECKOUTS),
       features: fillIncludedElementsArray(FEATURES),
-      description: repeatStr(LOREM, getRandomPositiveInteger(1, 3)),
+      description: repeatStr(LOREM, getRandomPositiveInteger(0, 3)),
       photos: fillIncludedElementsArray(PHOTOS),
     },
     location: {

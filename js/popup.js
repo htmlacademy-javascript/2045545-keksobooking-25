@@ -28,7 +28,11 @@ cardsElements.forEach(({
   cardElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} ${adjustWordForRooms(offer.rooms)} для ${offer.guests} ${adjustWordForGuests(offer.guests)}`;
   cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   cardElement.querySelector('.popup__features').textContent = offer.features;
-  cardElement.querySelector('.popup__description').textContent = offer.description;
+  if (offer.description !== '') {
+    cardElement.querySelector('.popup__description').textContent = offer.description;
+  } else {
+    cardElement.querySelector('.popup__description').classList.add('hidden');
+  }
   const photos = offer.photos;
   const advertPhotos = cardElement.querySelector('.popup__photo');
   const advertPhotoList = cardElement.querySelector('.popup__photos');
