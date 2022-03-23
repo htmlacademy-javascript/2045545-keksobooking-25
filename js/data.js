@@ -1,11 +1,15 @@
 import {
   getRandomPositiveInteger,
   getRandomPositiveFloat,
-  createAvatarFullPath,
   getRandomArrayElement,
   fillIncludedElementsArray,
-  repeatStr
+  repeatStr,
+  createRandomNumbersArray
 } from './utils.js';
+import {
+  getRussianTypeWord,
+  getRussianWordEnding
+} from './dictionary.js';
 
 
 const SIMILAR_ADVERTS_COUNT = 10;
@@ -30,6 +34,18 @@ const MIN_ROOMS_QTY = 1;
 const MAX_ROOMS_QTY = 6;
 const LOREM = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ipsum odit corrupti dolores fuga. Earum repellendus ducimus quaerat doloribus ut reiciendis placeat quos, saepe enim ipsa quis, recusandae officiis nihil.';
 
+let serialAvatarPicIndex = 0;
+const createAvatarFullPath = () => {
+  let avatarPicPath = 'img/avatars/user';
+  const randomNumbers = createRandomNumbersArray(SIMILAR_ADVERTS_COUNT);
+  const index = randomNumbers[serialAvatarPicIndex];
+  if (index <= 9) {
+    avatarPicPath += '0';
+  }
+  const avatarFullPath = `${avatarPicPath}${index}.png`;
+  serialAvatarPicIndex++;
+  return avatarFullPath;
+};
 
 const createAdvert = () => {
   const latitude = getRandomPositiveFloat(MIN_LAT, MAX_LAT, DECIMAL_PRECISION);
@@ -42,16 +58,16 @@ const createAdvert = () => {
     },
 
     offer: {
-      title: `${rooms}-rooms ${type}`,
+      title: `${rooms}-КОМНАТН${getRussianWordEnding(type).toUpperCase()} ${getRussianTypeWord(type).toUpperCase()}`,
       address: `${latitude}, ${longitude}`,
       price: getRandomPositiveInteger(MIN_PRICE, MAX_PRICE),
-      type: type,
+      type: getRussianTypeWord(type),
       rooms: rooms,
       guests: getRandomPositiveInteger(MIN_GUESTS_QTY, MAX_GUESTS_QTY),
       checkin: getRandomArrayElement(CHECKINS_CHECKOUTS),
       checkout: getRandomArrayElement(CHECKINS_CHECKOUTS),
       features: fillIncludedElementsArray(FEATURES),
-      description: repeatStr(LOREM, getRandomPositiveInteger(0, 10)),
+      description: repeatStr(LOREM, getRandomPositiveInteger(0, 3)),
       photos: fillIncludedElementsArray(PHOTOS),
     },
     location: {
@@ -69,4 +85,7 @@ const createAdverts = () => Array.from({
 
 export {
   createAdverts
+};
+export {
+  SIMILAR_ADVERTS_COUNT
 };

@@ -12,15 +12,17 @@ const getRandomPositiveFloat = (a, b, digits = 1) => {
   return +result.toFixed(digits);
 };
 
-let serialAvatarPicIndex = 1;
-const createAvatarFullPath = () => {
-  let avatarPicPath = 'img/avatars/user';
-  if (serialAvatarPicIndex <= 9) {
-    avatarPicPath += '/0';
+const createRandomNumbersArray = (length) => {
+  const randomNumbers = [];
+  for (let i = 0; i < length; i++) {
+    const randomNumber = getRandomPositiveInteger(1, length);
+    if (!randomNumbers.includes(randomNumber)) {
+      randomNumbers[i] = randomNumber;
+    } else {
+      i--;
+    }
   }
-  const avatarFullPath = `${avatarPicPath}${serialAvatarPicIndex}.png`;
-  serialAvatarPicIndex++;
-  return avatarFullPath;
+  return randomNumbers;
 };
 
 
@@ -73,8 +75,8 @@ const repeatStr = (str, n) => {
 export {
   getRandomPositiveInteger,
   getRandomPositiveFloat,
-  createAvatarFullPath,
   getRandomArrayElement,
   fillIncludedElementsArray,
-  repeatStr
+  repeatStr,
+  createRandomNumbersArray
 };
