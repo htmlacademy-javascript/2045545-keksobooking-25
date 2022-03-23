@@ -1,7 +1,10 @@
-import './popup.js';
+import {
+  renderPopup
+} from './popup.js';
 import {
   createAdverts
 } from './data.js';
 
 
-createAdverts();
+const adverts = createAdverts();
+renderPopup(adverts[0]);
