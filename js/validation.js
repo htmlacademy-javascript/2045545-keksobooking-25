@@ -77,11 +77,10 @@ function onRoomOrGuestChange() {
   pristine.validate(roomNumber);
 }
 
-
-form.querySelector('#room_number').addEventListener('focus', onRoomOrGuestChange);
 form.querySelector('#room_number').addEventListener('change', onRoomOrGuestChange);
-form.querySelector('#capacity').addEventListener('focus', onRoomOrGuestChange);
+form.querySelector('#room_number').addEventListener('focus', onRoomOrGuestChange);
 form.querySelector('#capacity').addEventListener('change', onRoomOrGuestChange);
+form.querySelector('#room_number').addEventListener('focus', onRoomOrGuestChange);
 
 
 pristine.addValidator(roomNumber, validateGuestNumber, getGuestNumberErrorMessage);
