@@ -8,6 +8,8 @@ import {
   deactivateForm,
   activateForm
 } from './form.js';
+import './validation.js';
+
 
 const adverts = createAdverts();
 renderPopup(adverts[0]);
