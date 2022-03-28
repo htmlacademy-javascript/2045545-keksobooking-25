@@ -41,11 +41,11 @@ const getPriceErrorMessage = () => {
 
 pristine.addValidator(priceField, validatePrice, getPriceErrorMessage);
 
-function onTypeChange() {
+const onTypeChange = () => {
   const type = form.querySelector('[name="type"]');
   priceField.placeholder = minPrice[type.value];
   pristine.validate(priceField);
-}
+};
 
 form.querySelector('[name="type"]').addEventListener('change', onTypeChange);
 
@@ -62,20 +62,14 @@ const guestNumberOptions = {
 const validateGuestNumber = () => guestNumberOptions[roomNumber.value].includes(guestNumber.value);
 
 
-function getGuestNumberErrorMessage() {
-  return `
-  Для
-    ${roomNumber.value} ${roomNumber.value==='1' ? 'комнаты': 'комнат'}
-    количество гостей ${guestNumber.value}
-    невозможно
-  `;
-}
+const getGuestNumberErrorMessage = () => `Для ${roomNumber.value} ${roomNumber.value==='1' ? 'комнаты': 'комнат'} количество гостей ${guestNumber.value} невозможно`;
 
-function onRoomOrGuestChange() {
+
+const onRoomOrGuestChange = () => {
   getGuestNumberErrorMessage();
   pristine.validate(guestNumber);
   pristine.validate(roomNumber);
-}
+};
 
 form.querySelector('#room_number').addEventListener('change', onRoomOrGuestChange);
 form.querySelector('#room_number').addEventListener('focus', onRoomOrGuestChange);
