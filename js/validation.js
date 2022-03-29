@@ -71,14 +71,33 @@ const onRoomOrGuestChange = () => {
   pristine.validate(roomNumber);
 };
 
-form.querySelector('#room_number').addEventListener('change', onRoomOrGuestChange);
-form.querySelector('#room_number').addEventListener('focus', onRoomOrGuestChange);
-form.querySelector('#capacity').addEventListener('change', onRoomOrGuestChange);
-form.querySelector('#room_number').addEventListener('focus', onRoomOrGuestChange);
+roomNumber.addEventListener('change', onRoomOrGuestChange);
+roomNumber.addEventListener('focus', onRoomOrGuestChange);
+guestNumber.addEventListener('change', onRoomOrGuestChange);
+guestNumber.addEventListener('focus', onRoomOrGuestChange);
 
 
 pristine.addValidator(roomNumber, validateGuestNumber, getGuestNumberErrorMessage);
 pristine.addValidator(guestNumber, validateGuestNumber, getGuestNumberErrorMessage);
+
+
+const timein = form.querySelector('#timein');
+const timeout = form.querySelector('#timeout');
+
+const validateTimeinTimeout = () => timein.value === timeout.value;
+const onTimeinTimeoutChangeSynchronize = (evt) => {
+  if (evt.target === timein) {
+    timeout.value = timein.value;
+  } else {
+    timein.value = timeout.value;
+  }
+};
+
+pristine.addValidator(timein, validateTimeinTimeout, 'указывается одинаковый расчетный час для времени заезда и выезда');
+pristine.addValidator(timeout, validateTimeinTimeout, 'указывается одинаковый расчетный час для времени заезда и выезда');
+
+timein.addEventListener('change', onTimeinTimeoutChangeSynchronize);
+timeout.addEventListener('change', onTimeinTimeoutChangeSynchronize);
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
