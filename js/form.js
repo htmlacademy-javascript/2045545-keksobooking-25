@@ -31,6 +31,7 @@ const activateForm = () => {
   enableElements(mapFiltersElements);
 };
 
+
 export {
   deactivateForm,
   activateForm

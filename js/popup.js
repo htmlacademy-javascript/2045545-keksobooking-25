@@ -3,8 +3,6 @@ import {
   adjustWordForGuests,
 } from './dictionary.js';
 
-
-const advertList = document.querySelector('#map-canvas');
 const advertTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const renderPopup = ({
@@ -30,7 +28,9 @@ const renderPopup = ({
       featuresListItem.remove();
     }
   });
-
+  if (!featuresContainer.children.length) {
+    featuresContainer.remove();
+  }
   if (offer.description !== '') {
     advertElement.querySelector('.popup__description').textContent = offer.description;
   } else {
@@ -46,7 +46,8 @@ const renderPopup = ({
     advertPhotoList.appendChild(advertPhoto);
   }
   advertElement.querySelector('.popup__avatar').src = author.avatar;
-  advertList.appendChild(advertElement);
+
+  return advertElement;
 };
 
 
