@@ -1,18 +1,17 @@
 import {
-  renderPopup
-} from './popup.js';
-import {
   createAdverts
 } from './data.js';
 import {
-  deactivateForm,
-  activateForm
-} from './form.js';
+  createMarker
+} from './map.js';
+
 import './validation.js';
 
+import './map.js';
+import './slider.js';
 
 const adverts = createAdverts();
-renderPopup(adverts[0]);
 
-deactivateForm();
-activateForm();
+adverts.forEach((advert) => {
+  createMarker(advert);
+});

@@ -26,7 +26,7 @@ const MAX_PRICE = 10000;
 const MIN_GUESTS_QTY = 1;
 const MAX_GUESTS_QTY = 15;
 const MIN_LAT = 0;
-const MAX_LAT = 90;
+const MAX_LAT = 70;
 const MIN_LNG = 0;
 const MAX_LNG = 180;
 const DECIMAL_PRECISION = 5;
@@ -35,9 +35,10 @@ const MAX_ROOMS_QTY = 6;
 const LOREM = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ipsum odit corrupti dolores fuga. Earum repellendus ducimus quaerat doloribus ut reiciendis placeat quos, saepe enim ipsa quis, recusandae officiis nihil.';
 
 let serialAvatarPicIndex = 0;
+const randomNumbers = createRandomNumbersArray(SIMILAR_ADVERTS_COUNT);
+
 const createAvatarFullPath = () => {
   let avatarPicPath = 'img/avatars/user';
-  const randomNumbers = createRandomNumbersArray(SIMILAR_ADVERTS_COUNT);
   const index = randomNumbers[serialAvatarPicIndex];
   if (index <= 9) {
     avatarPicPath += '0';
@@ -67,7 +68,7 @@ const createAdvert = () => {
       checkin: getRandomArrayElement(CHECKINS_CHECKOUTS),
       checkout: getRandomArrayElement(CHECKINS_CHECKOUTS),
       features: fillIncludedElementsArray(FEATURES),
-      description: repeatStr(LOREM, getRandomPositiveInteger(0, 3)),
+      description: repeatStr(LOREM, getRandomPositiveInteger(0, 2)),
       photos: fillIncludedElementsArray(PHOTOS),
     },
     location: {
@@ -82,6 +83,7 @@ const createAdvert = () => {
 const createAdverts = () => Array.from({
   length: SIMILAR_ADVERTS_COUNT
 }, createAdvert);
+
 
 export {
   createAdverts

@@ -93,11 +93,12 @@ const onTimeinTimeoutChangeSynchronize = (evt) => {
   }
 };
 
-pristine.addValidator(timein, validateTimeinTimeout, 'указывается одинаковый расчетный час для времени заезда и выезда');
-pristine.addValidator(timeout, validateTimeinTimeout, 'указывается одинаковый расчетный час для времени заезда и выезда');
+pristine.addValidator(timein, validateTimeinTimeout, 'Указывается одинаковый расчетный час для времени заезда и выезда');
+pristine.addValidator(timeout, validateTimeinTimeout, 'Указывается одинаковый расчетный час для времени заезда и выезда');
 
 timein.addEventListener('change', onTimeinTimeoutChangeSynchronize);
 timeout.addEventListener('change', onTimeinTimeoutChangeSynchronize);
+
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
