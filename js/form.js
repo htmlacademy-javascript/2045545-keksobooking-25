@@ -3,6 +3,7 @@ const mapFilters = document.querySelector('.map__filters');
 const formElements = form.querySelectorAll('.ad-form__element input,  .ad-form__element select, .ad-form__element textarea');
 const mapFiltersElements = mapFilters.querySelectorAll('.map__filters  select, .map__features');
 
+
 const disableElements = (elements) => {
   for (const element of elements) {
     element.disabled = true;

@@ -72,11 +72,25 @@ const repeatStr = (str, n) => {
   return newStr;
 };
 
+const closePopup = () => {
+  const popup = document.querySelector('.leaflet-popup-pane');
+  while (popup.firstChild) {
+    popup.removeChild(popup.firstChild);
+  }
+};
+
+const resetForm = () => {
+  closePopup();
+};
+
+
 export {
   getRandomPositiveInteger,
   getRandomPositiveFloat,
   getRandomArrayElement,
   fillIncludedElementsArray,
   repeatStr,
-  createRandomNumbersArray
+  createRandomNumbersArray,
+  closePopup,
+  resetForm
 };

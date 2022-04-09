@@ -1,6 +1,17 @@
 import {
+  sendData
+} from './api.js';
+import {
   getRussianTypeWord
 } from './dictionary.js';
+import {
+  closePopup,
+} from './utils.js';
+import {
+  createErrorMessage,
+  createSuccessMessage
+} from './messages.js';
+
 
 const form = document.querySelector('.ad-form');
 const pristine = new Pristine(form, {
@@ -99,8 +110,43 @@ pristine.addValidator(timeout, validateTimeinTimeout, 'Указывается о
 timein.addEventListener('change', onTimeinTimeoutChangeSynchronize);
 timeout.addEventListener('change', onTimeinTimeoutChangeSynchronize);
 
+const submitButton = form.querySelector('.ad-form__submit');
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Сохраняю...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const setUserFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          unblockSubmitButton();
+          createSuccessMessage();
+          form.reset();
+          closePopup();
+        },
+        () => {
+          // showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+          createErrorMessage();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
+
+export {
+  setUserFormSubmit
+};
