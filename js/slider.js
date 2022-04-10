@@ -13,12 +13,8 @@ noUiSlider.create(sliderElement, {
   step: 100,
   connect: 'lower',
   format: {
-    to: function (value) {
-      return value.toFixed(0);
-    },
-    from: function (value) {
-      return value;
-    }
+    to: (value) => value.toFixed(0),
+    from: (value) => value
   }
 
 });

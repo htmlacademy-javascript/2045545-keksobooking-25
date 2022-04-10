@@ -17,34 +17,50 @@ const renderPopup = ({
 
   advertElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} ${adjustWordForRooms(offer.rooms)} для ${offer.guests} ${adjustWordForGuests(offer.guests)}`;
   advertElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-  const advertFeatures = offer.features.slice();
+
+
   const featuresContainer = advertElement.querySelector('.popup__features');
   const featuresList = featuresContainer.querySelectorAll('.popup__feature');
-  featuresList.forEach((featuresListItem) => {
-    const isNecessary = advertFeatures.some(
-      (advertFeature) => featuresListItem.classList.contains(`popup__feature--${advertFeature}`),
-    );
-    if (!isNecessary) {
-      featuresListItem.remove();
+
+  if (offer.features) {
+    const advertFeatures = offer.features.slice();
+    featuresList.forEach((featuresListItem) => {
+      const isNecessary = advertFeatures.some(
+        (advertFeature) => featuresListItem.classList.contains(`popup__feature--${advertFeature}`),
+      );
+      if (!isNecessary) {
+        featuresListItem.remove();
+      }
+    });
+    if (!featuresContainer.children.length) {
+      featuresContainer.remove();
     }
-  });
-  if (!featuresContainer.children.length) {
+  } else {
     featuresContainer.remove();
   }
+
+
   if (offer.description !== '') {
     advertElement.querySelector('.popup__description').textContent = offer.description;
   } else {
     advertElement.querySelector('.popup__description').classList.add('hidden');
   }
-  const photos = offer.photos;
+
+
   const advertPhotos = advertElement.querySelector('.popup__photo');
   const advertPhotoList = advertElement.querySelector('.popup__photos');
-  advertElement.querySelector('.popup__photo').remove();
-  for (const photo of photos) {
-    const advertPhoto = advertPhotos.cloneNode(false);
-    advertPhoto.src = photo;
-    advertPhotoList.appendChild(advertPhoto);
+  if (offer.photos) {
+    const photos = offer.photos;
+    advertElement.querySelector('.popup__photo').remove();
+    for (const photo of photos) {
+      const advertPhoto = advertPhotos.cloneNode(false);
+      advertPhoto.src = photo;
+      advertPhotoList.appendChild(advertPhoto);
+    }
+  } else {
+    advertPhotos.remove();
   }
+
   advertElement.querySelector('.popup__avatar').src = author.avatar;
 
   return advertElement;
