@@ -22,7 +22,7 @@ const renderPopup = ({
   const featuresContainer = advertElement.querySelector('.popup__features');
   const featuresList = featuresContainer.querySelectorAll('.popup__feature');
 
-  if (Object.prototype.hasOwnProperty.call(offer, 'features')) {
+  if (offer.features) {
     const advertFeatures = offer.features.slice();
     featuresList.forEach((featuresListItem) => {
       const isNecessary = advertFeatures.some(
@@ -49,7 +49,7 @@ const renderPopup = ({
 
   const advertPhotos = advertElement.querySelector('.popup__photo');
   const advertPhotoList = advertElement.querySelector('.popup__photos');
-  if (Object.prototype.hasOwnProperty.call(offer, 'photos')) {
+  if (offer.photos) {
     const photos = offer.photos;
     advertElement.querySelector('.popup__photo').remove();
     for (const photo of photos) {

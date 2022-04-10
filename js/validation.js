@@ -104,8 +104,8 @@ const onTimeinTimeoutChangeSynchronize = (evt) => {
   }
 };
 
-pristine.addValidator(timein, validateTimeinTimeout, 'Указывается одинаковый расчетный час для времени заезда и выезда');
-pristine.addValidator(timeout, validateTimeinTimeout, 'Указывается одинаковый расчетный час для времени заезда и выезда');
+pristine.addValidator(timein, validateTimeinTimeout);
+pristine.addValidator(timeout, validateTimeinTimeout);
 
 timein.addEventListener('change', onTimeinTimeoutChangeSynchronize);
 timeout.addEventListener('change', onTimeinTimeoutChangeSynchronize);
