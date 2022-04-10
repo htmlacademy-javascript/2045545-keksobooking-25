@@ -9,9 +9,9 @@ const getData = (onSuccess) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch('https://25.javascript.pages.academy/keksobooking', {
-      method: 'POST',
-      body,
-    }, )
+    method: 'POST',
+    body,
+  }, )
     .then((response) => {
       if (response.ok) {
         onSuccess();
