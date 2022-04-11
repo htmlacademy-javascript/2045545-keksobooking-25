@@ -1,5 +1,5 @@
 import {
-  createMarker
+  createMarker, clearMap
 } from './map.js';
 import {
   resetForm
@@ -15,17 +15,27 @@ import {
 import {
   getData,
 } from './api.js';
+import {compareAdverts,setHousingType} from './filters.js';
 
 const MAX_ADVERTS_QUANTITY = 10;
 
 const resetButton = document.querySelector('.ad-form__reset');
 
-getData((adverts) => {
-  const maxQtyAdverts = adverts.slice(0, MAX_ADVERTS_QUANTITY);
+const renderAdverts =(adverts, cb)=>{
+  clearMap();
+  const advertsArrayCopy=adverts.slice();
+  advertsArrayCopy.sort(compareAdverts);
+  const maxQtyAdverts = advertsArrayCopy.slice(0, MAX_ADVERTS_QUANTITY);
   maxQtyAdverts.forEach((advert) => {
-    createMarker(advert);
+    cb(advert);
   });
+};
+
+getData((adverts) => {
+  renderAdverts(adverts, createMarker);
+  setHousingType(()=>renderAdverts(adverts, createMarker));
 });
+
 
 setUserFormSubmit();
 

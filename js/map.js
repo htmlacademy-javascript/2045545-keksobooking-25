@@ -83,7 +83,10 @@ const createMarker = (advert) => {
 
 };
 
+const clearMap =()=>{
+  markerGroup.clearLayers();
+};
 
 export {
-  createMarker
+  createMarker, clearMap
 };
