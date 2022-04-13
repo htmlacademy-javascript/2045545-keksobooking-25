@@ -1,68 +1,24 @@
-const checkByType =(adverts)=> {
-  const housingType=document.querySelector('#housing-type');
-  const advertsCopy=adverts.slice();
-  if (housingType.value !=='any') {
-    const advertsCopyFiltered= advertsCopy.filter((advert) =>(advert.offer.type===housingType.value ));
-    return advertsCopyFiltered;
-  }
-  else {
-    return advertsCopy;
-  }
+const PriceLevels = {
+  default: 'any',
+  low: 'low',
+  middle: 'middle',
+  high: 'high',
 };
+
+const DEFAULT_VALUE='any';
 
 const checkPriceLevel =(advert, chosenLevel)=> {
-  let level ='any';
-  if  (advert.offer.price > 0 && advert.offer.price <10000  ){
-    level ='low';
+  let level =PriceLevels.default;
+  if  (advert.offer.price >= 0 && advert.offer.price <10000){
+    level = PriceLevels.low;
   }
-  else if (advert.offer.price > 10000 && advert.offer.price < 50000){
-    level ='middle';
+  else if (advert.offer.price >= 10000 && advert.offer.price <= 50000){
+    level =PriceLevels.middle;
   }
-  else if (advert.offer.price >= 50000 ) {
-    level ='high';
+  else if (advert.offer.price > 50000 ) {
+    level =PriceLevels.high;
   }
   return level===chosenLevel;
-};
-
-const checkByPrice =(adverts)=>{
-  const housingPrice=document.querySelector('#housing-price');
-  const advertsCopy=adverts.slice();
-  if (housingPrice.value !=='any') {
-    const chosenLevel=housingPrice.value;
-    const advertsCopyFiltered= advertsCopy.filter((advert)=>checkPriceLevel(advert, chosenLevel));
-
-    return advertsCopyFiltered;
-
-  }
-  else {
-    return advertsCopy;
-  }
-};
-
-
-const checkByRooms =(adverts)=> {
-  const housingRooms=document.querySelector('#housing-rooms');
-  const advertsCopy=adverts.slice();
-  if (housingRooms.value !=='any') {
-    const advertsCopyFiltered= advertsCopy.filter((advert) =>(advert.offer.rooms.toString()===housingRooms.value ));
-    return advertsCopyFiltered;
-  }
-  else {
-    return advertsCopy;
-  }
-};
-
-
-const checkByGuests =(adverts)=> {
-  const housingGuests=document.querySelector('#housing-guests');
-  const advertsCopy=adverts.slice();
-  if (housingGuests.value !=='any') {
-    const advertsCopyFiltered= advertsCopy.filter((advert) =>(advert.offer.guests.toString()===housingGuests.value ));
-    return advertsCopyFiltered;
-  }
-  else {
-    return advertsCopy;
-  }
 };
 
 const checkingFeature =(advert, feature)=>{
@@ -73,41 +29,66 @@ const checkingFeature =(advert, feature)=>{
 };
 
 
-const checkByWifi=(adverts)=> {
-  const wifi=document.querySelector('input[id=filter-wifi]');
-  const advertsCopy=adverts.slice();
-  if (wifi.checked) {
-    const advertsCopyFiltered= advertsCopy.filter((advert) =>checkingFeature(advert, 'wifi'));
-    return advertsCopyFiltered;
+const filterByType =(adverts)=> {
+  const housingType=document.querySelector('#housing-type');
+  const copiedAdverts=adverts.slice();
+  if (housingType.value ===DEFAULT_VALUE) {
+    return copiedAdverts;
   }
   else {
-    return advertsCopy;
+    const filteredAdverts= copiedAdverts.filter((advert) =>(advert.offer.type===housingType.value ));
+    return filteredAdverts;
   }
 };
 
 
-const checkByDishwasher=(adverts)=> {
-  const dishwasher=document.querySelector('input[id=filter-dishwasher]');
-  const advertsCopy=adverts.slice();
-  if (dishwasher.checked) {
-    const advertsCopyFiltered= advertsCopy.filter((advert) =>checkingFeature(advert, 'dishwasher'));
-    return advertsCopyFiltered;
-  }
-  else {
-    return advertsCopy;
+const filterByPrice =(adverts)=>{
+  const housingPrice=document.querySelector('#housing-price');
+  const copiedAdverts=adverts.slice();
+  if (housingPrice.value === DEFAULT_VALUE){
+    return copiedAdverts;
+  } else   {
+    const chosenLevel=housingPrice.value;
+    const filteredAdverts= copiedAdverts.filter((advert)=>checkPriceLevel(advert, chosenLevel));
+    return filteredAdverts;
   }
 };
 
 
-const checkByFeature =(adverts, feature)=>{
+const filterByRooms =(adverts)=> {
+  const housingRooms=document.querySelector('#housing-rooms');
+  const copiedAdverts=adverts.slice();
+  if (housingRooms.value ===DEFAULT_VALUE){
+    return copiedAdverts;
+  } else {
+    const filteredAdverts= copiedAdverts.filter((advert) =>(advert.offer.rooms.toString()===housingRooms.value ));
+    return filteredAdverts;
+  }
+};
+
+
+const filterByGuests =(adverts)=> {
+  const housingGuests=document.querySelector('#housing-guests');
+  const copiedAdverts=adverts.slice();
+  if (housingGuests.value ===DEFAULT_VALUE) {
+    return copiedAdverts;
+  }
+  else {
+    const filteredAdverts= copiedAdverts.filter((advert) =>(advert.offer.guests.toString()===housingGuests.value ));
+    return filteredAdverts;
+  }
+};
+
+
+const filterByFeature =(adverts, feature)=>{
   const filter=document.querySelector(`input[id=filter-${feature}`);
-  const advertsCopy=adverts.slice();
+  const copiedAdverts=adverts.slice();
   if (filter.checked) {
-    const advertsCopyFiltered= advertsCopy.filter((advert) =>checkingFeature(advert, feature));
-    return advertsCopyFiltered;
+    const filteredAdverts= copiedAdverts.filter((advert) =>checkingFeature(advert, feature));
+    return filteredAdverts;
   }
   else {
-    return advertsCopy;
+    return copiedAdverts;
   }
 
 };
@@ -129,10 +110,27 @@ const compareAdverts = (advertA, advertB) => {
   return rankB - rankA;
 };
 
+
+const completelyFilter =(adverts) =>{
+  const copiedAdverts=adverts.slice();
+  let filtered= filterByType(copiedAdverts);
+  filtered= filterByPrice(filtered);
+  filtered =filterByRooms(filtered);
+  filtered =filterByGuests(filtered);
+  filtered=filterByFeature(filtered, 'wifi');
+  filtered=filterByFeature(filtered, 'dishwasher');
+  filtered=filterByFeature(filtered, 'parking');
+  filtered=filterByFeature(filtered, 'washer');
+  filtered=filterByFeature(filtered, 'elevator');
+  filtered=filterByFeature(filtered, 'conditioner');
+  return filtered;
+};
+
 const setFilter =(cb) => {
   const filterForm=document.querySelector('.map__filters');
   filterForm.addEventListener('change', cb);
 };
 
 
-export {setFilter, checkByType, checkByPrice, checkByRooms, checkByGuests, checkByWifi, checkByDishwasher, checkByFeature, compareAdverts};
+export {setFilter, compareAdverts, completelyFilter};
+

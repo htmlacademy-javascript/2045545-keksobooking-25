@@ -3,7 +3,7 @@ import {
 } from './form.js';
 
 import {
-  renderPopup
+  renderAdvert
 } from './popup.js';
 
 
@@ -79,13 +79,14 @@ const createMarker = (advert) => {
 
   marker
     .addTo(markerGroup)
-    .bindPopup(renderPopup(advert));
+    .bindPopup(renderAdvert(advert));
 
 };
 
 const clearMap =()=>{
   markerGroup.clearLayers();
 };
+
 
 export {
   createMarker, clearMap
