@@ -2,10 +2,10 @@ import {
   createMarker
 } from './map.js';
 import {
-  resetForm
+  resetForm, debounce
 } from './utils.js';
+import {renderFilteredAdverts} from './popup.js';
 import './validation.js';
-
 import './map.js';
 import './slider.js';
 import './api.js';
@@ -15,17 +15,20 @@ import {
 import {
   getData,
 } from './api.js';
+import {setFilter} from './filters.js';
+import './photos.js';
 
-const MAX_ADVERTS_QUANTITY = 10;
+
+const RERENDER_DELAY = 500;
 
 const resetButton = document.querySelector('.ad-form__reset');
 
+
 getData((adverts) => {
-  const maxQtyAdverts = adverts.slice(0, MAX_ADVERTS_QUANTITY);
-  maxQtyAdverts.forEach((advert) => {
-    createMarker(advert);
-  });
+  renderFilteredAdverts(adverts, createMarker);
+  setFilter(debounce(()=>renderFilteredAdverts(adverts, createMarker), RERENDER_DELAY,));
 });
+
 
 setUserFormSubmit();
 

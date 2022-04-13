@@ -1,11 +1,16 @@
 import {
   adjustWordForRooms,
   adjustWordForGuests,
+  getRussianTypeWord
 } from './dictionary.js';
+import { clearMap} from './map.js';
+import {completelyFilter, compareAdverts} from './filters.js';
+
+const MAX_ADVERTS_QUANTITY = 10;
 
 const advertTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const renderPopup = ({
+const renderAdvert = ({
   author,
   offer
 }) => {
@@ -13,7 +18,7 @@ const renderPopup = ({
   advertElement.querySelector('.popup__title').textContent = offer.title;
   advertElement.querySelector('.popup__text--address').textContent = offer.address;
   advertElement.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-  advertElement.querySelector('.popup__type').textContent = offer.type;
+  advertElement.querySelector('.popup__type').textContent = getRussianTypeWord(offer.type);
 
   advertElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} ${adjustWordForRooms(offer.rooms)} для ${offer.guests} ${adjustWordForGuests(offer.guests)}`;
   advertElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
@@ -67,6 +72,17 @@ const renderPopup = ({
 };
 
 
+const renderFilteredAdverts =(adverts,  cb)=>{
+  clearMap();
+  const filteredAdverts = completelyFilter(adverts);
+  const sortedAdverts=filteredAdverts.sort(compareAdverts);
+  const maxQtyAdverts = sortedAdverts.slice(0, MAX_ADVERTS_QUANTITY);
+  maxQtyAdverts.forEach((advert) => {
+    cb(advert);
+  });
+};
+
 export {
-  renderPopup
+  renderAdvert,
+  renderFilteredAdverts
 };
