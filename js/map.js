@@ -6,6 +6,12 @@ import {
   renderAdvert
 } from './popup.js';
 
+const DEFAULT_LATITUDE =35.68173;
+const DEFAULT_LONGITUDE =139.75393;
+const MAP_SCALE =10;
+const MAIN_PIN_SIZE= 52;
+const COMMON_PIN_SIZE =40;
+
 
 const form = document.querySelector('.ad-form');
 const addressField = form.querySelector('#address');
@@ -16,9 +22,9 @@ const map = L.map('map-canvas')
     activateForm();
   })
   .setView({
-    lat: 35.68173,
-    lng: 139.75393,
-  }, 10);
+    lat: DEFAULT_LATITUDE,
+    lng: DEFAULT_LONGITUDE,
+  }, MAP_SCALE);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -29,13 +35,13 @@ L.tileLayer(
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: [MAIN_PIN_SIZE, MAIN_PIN_SIZE],
+  iconAnchor: [MAIN_PIN_SIZE/2, MAIN_PIN_SIZE],
 });
 
 const mainPinMarker = L.marker({
-  lat: 35.681729,
-  lng: 139.753927,
+  lat: DEFAULT_LATITUDE,
+  lng: DEFAULT_LONGITUDE,
 }, {
   draggable: true,
   icon: mainPinIcon,
@@ -51,20 +57,20 @@ mainPinMarker.on('moveend', (evt) => {
 
 form.addEventListener('reset', () => {
   mainPinMarker.setLatLng({
-    lat: 35.68173,
-    lng: 139.75393,
+    lat: DEFAULT_LATITUDE,
+    lng: DEFAULT_LONGITUDE,
   });
   map.setView({
-    lat: 35.68173,
-    lng: 139.75393,
+    lat: DEFAULT_LATITUDE,
+    lng: DEFAULT_LONGITUDE,
   }, 10);
 });
 
 
 const icon = L.icon({
   iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: [COMMON_PIN_SIZE, COMMON_PIN_SIZE],
+  iconAnchor: [COMMON_PIN_SIZE/2, COMMON_PIN_SIZE],
 });
 
 
