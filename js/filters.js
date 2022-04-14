@@ -5,17 +5,31 @@ const PriceLevels = {
   high: 'high',
 };
 
+const PriceRangePoints={
+  minLowLevel: 0,
+  minMiddleLevel: 10000,
+  minHighLevel: 50000,
+};
+
 const DEFAULT_VALUE='any';
+
+const housingType=document.querySelector('#housing-type');
+const housingPrice=document.querySelector('#housing-price');
+const housingRooms=document.querySelector('#housing-rooms');
+const housingGuests=document.querySelector('#housing-guests');
+const filterForm=document.querySelector('.map__filters');
+const filters =filterForm.querySelectorAll('input[name="features"]');
+
 
 const checkPriceLevel =(advert, chosenLevel)=> {
   let level =PriceLevels.default;
-  if  (advert.offer.price >= 0 && advert.offer.price <10000){
+  if  (advert.offer.price >= PriceRangePoints.minLowLevel && advert.offer.price < PriceRangePoints.minMiddleLevel){
     level = PriceLevels.low;
   }
-  else if (advert.offer.price >= 10000 && advert.offer.price <= 50000){
+  else if (advert.offer.price >= PriceRangePoints.minMiddleLevel && advert.offer.price <= PriceRangePoints.minHighLevel){
     level =PriceLevels.middle;
   }
-  else if (advert.offer.price > 50000 ) {
+  else if (advert.offer.price > PriceRangePoints.minHighLevel ) {
     level =PriceLevels.high;
   }
   return level===chosenLevel;
@@ -28,9 +42,7 @@ const checkingFeature =(advert, feature)=>{
   return false;
 };
 
-
 const filterByType =(adverts)=> {
-  const housingType=document.querySelector('#housing-type');
   const copiedAdverts=adverts.slice();
   if (housingType.value ===DEFAULT_VALUE) {
     return copiedAdverts;
@@ -41,9 +53,7 @@ const filterByType =(adverts)=> {
   }
 };
 
-
 const filterByPrice =(adverts)=>{
-  const housingPrice=document.querySelector('#housing-price');
   const copiedAdverts=adverts.slice();
   if (housingPrice.value === DEFAULT_VALUE){
     return copiedAdverts;
@@ -54,9 +64,7 @@ const filterByPrice =(adverts)=>{
   }
 };
 
-
 const filterByRooms =(adverts)=> {
-  const housingRooms=document.querySelector('#housing-rooms');
   const copiedAdverts=adverts.slice();
   if (housingRooms.value ===DEFAULT_VALUE){
     return copiedAdverts;
@@ -66,9 +74,7 @@ const filterByRooms =(adverts)=> {
   }
 };
 
-
 const filterByGuests =(adverts)=> {
-  const housingGuests=document.querySelector('#housing-guests');
   const copiedAdverts=adverts.slice();
   if (housingGuests.value ===DEFAULT_VALUE) {
     return copiedAdverts;
@@ -79,9 +85,19 @@ const filterByGuests =(adverts)=> {
   }
 };
 
+const createSelector =(feature) =>{
+  const selector= `input[id=filter-${feature}`;
+  return selector;
+};
+
+const createFilterByFeature =(feature)=> {
+  const selector=createSelector(feature);
+  const filter =document.querySelector(selector);
+  return filter;
+};
 
 const filterByFeature =(adverts, feature)=>{
-  const filter=document.querySelector(`input[id=filter-${feature}`);
+  const filter=createFilterByFeature(feature);
   const copiedAdverts=adverts.slice();
   if (filter.checked) {
     const filteredAdverts= copiedAdverts.filter((advert) =>checkingFeature(advert, feature));
@@ -90,7 +106,6 @@ const filterByFeature =(adverts, feature)=>{
   else {
     return copiedAdverts;
   }
-
 };
 
 
@@ -110,7 +125,6 @@ const compareAdverts = (advertA, advertB) => {
   return rankB - rankA;
 };
 
-
 const completelyFilter =(adverts) =>{
   const copiedAdverts=adverts.slice();
   let filtered= filterByType(copiedAdverts);
@@ -127,10 +141,19 @@ const completelyFilter =(adverts) =>{
 };
 
 const setFilter =(cb) => {
-  const filterForm=document.querySelector('.map__filters');
   filterForm.addEventListener('change', cb);
 };
 
+const resetFilters=()=>{
+  housingType.value=DEFAULT_VALUE;
+  housingPrice.value=DEFAULT_VALUE;
+  housingRooms.value=DEFAULT_VALUE;
+  housingGuests.value=DEFAULT_VALUE;
+  for (let i=0; i<filters.length; i++){
+    filters[i].checked=false;
+  }
+};
 
-export {setFilter, compareAdverts, completelyFilter};
+export {setFilter, compareAdverts, completelyFilter, resetFilters};
+
 

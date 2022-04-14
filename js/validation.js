@@ -11,9 +11,17 @@ import {
   createErrorMessage,
   createSuccessMessage
 } from './messages.js';
+import { resetFilters } from './filters.js';
+import { removeAvatarPreview, removePhotoPreviews } from './photos.js';
 
+const DEFAULT_PRICE_PLACEHOLDER=5000;
 
 const form = document.querySelector('.ad-form');
+const type = form.querySelector('[name="type"]');
+const price = form.querySelector('#price');
+const sliderElement = document.querySelector('.ad-form__slider');
+
+
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',
   errorClass: 'ad-form__element--invalid',
@@ -25,12 +33,6 @@ const pristine = new Pristine(form, {
 
 const validateTitle = (value) => value.length >= 30 && value.length <= 100;
 
-pristine.addValidator(
-  form.querySelector('#title'),
-  validateTitle);
-
-
-const priceField = form.querySelector('#price');
 const minPrice = {
   'bungalow': 0,
   'flat': 1000,
@@ -39,36 +41,60 @@ const minPrice = {
   'palace': 10000,
 };
 
-const validatePrice = () => {
-  const type = form.querySelector('[name="type"]');
-  const price = form.querySelector('#price');
-  return price.value >= minPrice[type.value];
-};
-
-const getPriceErrorMessage = () => {
-  const type = form.querySelector('[name="type"]');
-  return `Не менее ${minPrice[type.value]} р/ночь при типе жилья "${getRussianTypeWord(type.value).toLowerCase()}"`;
-};
-
-pristine.addValidator(priceField, validatePrice, getPriceErrorMessage);
-
-const onTypeChange = () => {
-  const type = form.querySelector('[name="type"]');
-  priceField.placeholder = minPrice[type.value];
-  pristine.validate(priceField);
-};
-
-form.querySelector('[name="type"]').addEventListener('change', onTypeChange);
-
-
-const roomNumber = form.querySelector('#room_number');
-const guestNumber = form.querySelector('#capacity');
 const guestNumberOptions = {
   '1': ['1'],
   '2': ['1', '2'],
   '3': ['1', '2', '3'],
   '100': ['0']
 };
+
+const PRICE_MIN =0;
+const PRICE_MAX=100000;
+const START_SLIDER_POSITION=5000;
+const SLIDER_STEP=1;
+
+
+let priceIsChanged = 0;
+let userSetPrice = 0;
+
+pristine.addValidator(
+  form.querySelector('#title'),
+  validateTitle);
+
+const validatePrice = () =>   price.value >= minPrice[type.value];
+
+const getPriceErrorMessage = () =>
+  `Не менее ${minPrice[type.value]} р/ночь при типе жилья "${getRussianTypeWord(type.value).toLowerCase()}"`;
+
+
+pristine.addValidator(price, validatePrice, getPriceErrorMessage);
+
+
+const onPriceChange =()=> {
+  priceIsChanged =1;
+  userSetPrice = price.value;
+};
+
+const onTypeChange = () => {
+  if (priceIsChanged) {
+    price.value = userSetPrice;
+    price.placeholder=userSetPrice;
+    priceIsChanged = 0;
+  }
+  else if (priceIsChanged ===0 ) {
+    price.placeholder = minPrice[type.value];
+  }
+  pristine.validate(price);
+};
+
+
+price.addEventListener('change', onPriceChange);
+type.addEventListener('change', onTypeChange);
+
+
+const roomNumber = form.querySelector('#room_number');
+const guestNumber = form.querySelector('#capacity');
+
 
 const validateGuestNumber = () => guestNumberOptions[roomNumber.value].includes(guestNumber.value);
 
@@ -123,6 +149,24 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
+const resetPricePlaceholder=()=>{
+  price.placeholder=DEFAULT_PRICE_PLACEHOLDER;
+};
+
+const resetSlider=()=> {
+  sliderElement.noUiSlider.set(price.placeholder);
+};
+
+const resetForm = () => {
+  closePopup();
+  removeAvatarPreview();
+  removePhotoPreviews();
+  resetSlider();
+  resetFilters();
+  resetPricePlaceholder();
+};
+
+
 const setUserFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -143,10 +187,39 @@ const setUserFormSubmit = () => {
         },
         new FormData(evt.target),
       );
+      resetForm();
     }
   });
 };
 
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: PRICE_MIN,
+    max: PRICE_MAX,
+  },
+  start: START_SLIDER_POSITION,
+  step: SLIDER_STEP,
+  connect: 'lower',
+  format: {
+    to: (value) => value.toFixed(0),
+    from: (value) => value
+  }
+
+});
+
+
+sliderElement.noUiSlider.on('update', () => {
+  price.value = sliderElement.noUiSlider.get();
+  priceIsChanged=1;
+  userSetPrice = price.value;
+  pristine.validate(price);
+});
+
+type.addEventListener('change', () => {
+  sliderElement.noUiSlider.set(price.placeholder);
+});
+
+
 export {
-  setUserFormSubmit
-};
+  setUserFormSubmit, resetForm};

@@ -2,15 +2,14 @@ import {
   createMarker
 } from './map.js';
 import {
-  resetForm, debounce
+  debounce
 } from './utils.js';
 import {renderFilteredAdverts} from './popup.js';
 import './validation.js';
 import './map.js';
-import './slider.js';
 import './api.js';
 import {
-  setUserFormSubmit
+  setUserFormSubmit, resetForm
 } from './validation.js';
 import {
   getData,
