@@ -73,15 +73,15 @@ pristine.addValidator(price, validatePrice, getPriceErrorMessage);
 const onPriceChange =()=> {
   priceIsChanged =1;
   userSetPrice = price.value;
+  sliderElement.noUiSlider.set(price.value);
 };
 
 const onTypeChange = () => {
   if (priceIsChanged) {
     price.value = userSetPrice;
     price.placeholder=userSetPrice;
-    priceIsChanged = 0;
   }
-  else if (priceIsChanged ===0 ) {
+  else   {
     price.placeholder = minPrice[type.value];
   }
   pristine.validate(price);
@@ -181,7 +181,6 @@ const setUserFormSubmit = () => {
           closePopup();
         },
         () => {
-          // showAlert('Не удалось отправить форму. Попробуйте ещё раз');
           createErrorMessage();
           unblockSubmitButton();
         },
@@ -209,12 +208,23 @@ noUiSlider.create(sliderElement, {
 });
 
 
-sliderElement.noUiSlider.on('update', () => {
+const putUserPriceToPriceInput = () => {
   price.value = sliderElement.noUiSlider.get();
-  priceIsChanged=1;
   userSetPrice = price.value;
   pristine.validate(price);
+};
+
+
+sliderElement.noUiSlider.on('update', () => {
+  putUserPriceToPriceInput();
 });
+
+sliderElement.noUiSlider.on('slide', () => {
+  putUserPriceToPriceInput();
+  priceIsChanged = 1;
+});
+
+priceIsChanged = 0;
 
 type.addEventListener('change', () => {
   sliderElement.noUiSlider.set(price.placeholder);
