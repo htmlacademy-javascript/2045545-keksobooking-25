@@ -20,6 +20,8 @@ const form = document.querySelector('.ad-form');
 const type = form.querySelector('[name="type"]');
 const price = form.querySelector('#price');
 const sliderElement = document.querySelector('.ad-form__slider');
+const avatarPreview = document.querySelector('.ad-form-header__preview img');
+const photosPreviewContainer=document.querySelector('.ad-form__photo-container');
 
 
 const pristine = new Pristine(form, {
@@ -73,15 +75,15 @@ pristine.addValidator(price, validatePrice, getPriceErrorMessage);
 const onPriceChange =()=> {
   priceIsChanged =1;
   userSetPrice = price.value;
+  sliderElement.noUiSlider.set(price.value);
 };
 
 const onTypeChange = () => {
   if (priceIsChanged) {
     price.value = userSetPrice;
     price.placeholder=userSetPrice;
-    priceIsChanged = 0;
   }
-  else if (priceIsChanged ===0 ) {
+  else   {
     price.placeholder = minPrice[type.value];
   }
   pristine.validate(price);
@@ -164,6 +166,34 @@ const resetForm = () => {
   resetSlider();
   resetFilters();
   resetPricePlaceholder();
+  priceIsChanged = 0;
+};
+
+
+const putUserPriceToPriceInput = () => {
+  price.value = sliderElement.noUiSlider.get();
+  userSetPrice = price.value;
+  pristine.validate(price);
+};
+
+
+const keepPhotoPreviewWrappers =()=> {
+  const containerChildren = photosPreviewContainer.children;
+  const photoWrappers=[];
+  for (const element of containerChildren) {
+    if (element.classList.contains('ad-form__photo')){
+      const elementCopy = element.cloneNode(true);
+      photoWrappers.push(elementCopy);
+    }
+  }
+  return photoWrappers;
+};
+
+const restorePhotoPreviewWrappers =(photoWrappers) => {
+  photosPreviewContainer.querySelector('.ad-form__photo').remove();
+  for (let i=0; i < photoWrappers.length; i++){
+    photosPreviewContainer.appendChild(photoWrappers[i]);
+  }
 };
 
 
@@ -173,6 +203,9 @@ const setUserFormSubmit = () => {
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
+      const priceStorage= price.value;
+      const avatarPreviewStorage= avatarPreview.src;
+      const housingPreviews=keepPhotoPreviewWrappers();
       sendData(
         () => {
           unblockSubmitButton();
@@ -181,9 +214,13 @@ const setUserFormSubmit = () => {
           closePopup();
         },
         () => {
-          // showAlert('Не удалось отправить форму. Попробуйте ещё раз');
           createErrorMessage();
           unblockSubmitButton();
+          price.value = priceStorage;
+          sliderElement.noUiSlider.set(price.value);
+          priceIsChanged = 1;
+          avatarPreview.src=avatarPreviewStorage;
+          restorePhotoPreviewWrappers(housingPreviews);
         },
         new FormData(evt.target),
       );
@@ -210,11 +247,15 @@ noUiSlider.create(sliderElement, {
 
 
 sliderElement.noUiSlider.on('update', () => {
-  price.value = sliderElement.noUiSlider.get();
-  priceIsChanged=1;
-  userSetPrice = price.value;
-  pristine.validate(price);
+  putUserPriceToPriceInput();
 });
+
+sliderElement.noUiSlider.on('slide', () => {
+  putUserPriceToPriceInput();
+  priceIsChanged = 1;
+});
+
+priceIsChanged = 0;
 
 type.addEventListener('change', () => {
   sliderElement.noUiSlider.set(price.placeholder);
